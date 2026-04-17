@@ -17,6 +17,7 @@
     <RepositoryUrl>https://github.com/coldhighsun/WebSocketFlow</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
   </PropertyGroup>
 
   <ItemGroup>
