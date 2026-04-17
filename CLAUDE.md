@@ -46,3 +46,5 @@ This is a single-purpose library with no dependencies beyond polyfills for `nets
 **Multi-targeting**: `netstandard2.0;net8.0;net9.0;net10.0`. The `netstandard2.0` target pulls in `Microsoft.Bcl.AsyncInterfaces`, `System.Memory`, and `System.Threading.Tasks.Extensions`. All targets use the `ArraySegment<byte>` overload of `WebSocket.ReceiveAsync` for uniformity. `LangVersion=latest` is set globally so C# modern syntax works on all TFMs.
 
 **Package management**: Central via `Directory.Packages.props`. `Directory.Build.props` sets `ImplicitUsings`, `Nullable`, `ArtifactsPath`, and the Release-mode no-symbols config (`DebugType=none`, `DebugSymbols=false`).
+
+**Versioning**: MinVer derives the package version from git tags (e.g. `v1.0.0`). No version is set in the project file; the version is `0.0.0-alpha.0` until a tag exists.
