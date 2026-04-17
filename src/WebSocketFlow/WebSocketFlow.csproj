@@ -6,8 +6,25 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>WebSocketFlow</PackageId>
+    <Title>WebSocketFlow</Title>
+    <Description>Extension methods for System.Net.WebSockets.WebSocket that simplify receiving complete messages and asynchronously enumerating incoming messages.</Description>
+    <Authors>coldhighsun</Authors>
+    <PackageTags>websocket;extensions;async;asyncenumerable</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/coldhighsun/WebSocketFlow</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/coldhighsun/WebSocketFlow</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="MinVer" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
