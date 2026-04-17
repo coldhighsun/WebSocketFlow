@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net8.0;net9.0;net10.0</TargetFrameworks>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
+    <PackageReference Include="System.Memory" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
+  </ItemGroup>
+
+</Project>
