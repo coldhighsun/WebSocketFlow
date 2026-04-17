@@ -41,7 +41,7 @@ public class WebSocketFlowTests
         ws.EnqueueClose();
 
         var messages = new List<string>();
-        await foreach (var msg in ws.ReadAllMessagesAsync())
+        await foreach (var msg in ws.ReadAllMessagesAsync(cancellationToken: TestContext.Current.CancellationToken))
             messages.Add(Encoding.UTF8.GetString(msg.Data.Span));
 
         Assert.Equal(["foo", "bar"], messages);
@@ -57,7 +57,7 @@ public class WebSocketFlowTests
         ws.Enqueue("after-close"u8.ToArray(), WebSocketMessageType.Text, endOfMessage: true);
 
         var count = 0;
-        await foreach (var _ in ws.ReadAllMessagesAsync())
+        await foreach (var _ in ws.ReadAllMessagesAsync(cancellationToken: TestContext.Current.CancellationToken))
             count++;
 
         Assert.Equal(1, count);
@@ -73,7 +73,7 @@ public class WebSocketFlowTests
         ws.EnqueueClose();
 
         var messages = new List<string>();
-        await foreach (var msg in ws.ReadAllMessagesAsync())
+        await foreach (var msg in ws.ReadAllMessagesAsync(cancellationToken: TestContext.Current.CancellationToken))
             messages.Add(Encoding.UTF8.GetString(msg.Data.Span));
 
         Assert.Equal(["one", "two", "three"], messages);
@@ -86,7 +86,7 @@ public class WebSocketFlowTests
         var payload = new byte[] { 0x00, 0xFF, 0x7F, 0x80 };
         ws.Enqueue(payload, WebSocketMessageType.Binary, endOfMessage: true);
 
-        var msg = await ws.ReceiveMessageAsync();
+        var msg = await ws.ReceiveMessageAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(WebSocketMessageType.Binary, msg.MessageType);
         Assert.Equal(payload, msg.Data.ToArray());
@@ -114,7 +114,7 @@ public class WebSocketFlowTests
         var ws = new FakeWebSocket();
         ws.EnqueueClose();
 
-        var msg = await ws.ReceiveMessageAsync();
+        var msg = await ws.ReceiveMessageAsync(TestContext.Current.CancellationToken);
 
         Assert.True(msg.CloseReceived);
     }
@@ -163,7 +163,7 @@ public class WebSocketFlowTests
         var payload = "hello"u8.ToArray();
         ws.Enqueue(payload, WebSocketMessageType.Text, endOfMessage: true);
 
-        var msg = await ws.ReceiveMessageAsync();
+        var msg = await ws.ReceiveMessageAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal(WebSocketMessageType.Text, msg.MessageType);
         Assert.Equal(payload, msg.Data.ToArray());

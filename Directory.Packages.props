@@ -6,6 +6,7 @@
     <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.6" />
     <PackageVersion Include="System.Memory" Version="4.6.3" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
+    <PackageVersion Include="MinVer" Version="7.0.0" />
     <PackageVersion Include="coverlet.collector" Version="8.0.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
