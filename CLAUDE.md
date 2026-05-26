@@ -26,7 +26,7 @@ dotnet pack src/WebSocketFlow/WebSocketFlow.csproj -c Release -o ./artifacts
 
 ## CI/CD
 
-CI runs on `push`/`PR` to `main` (Ubuntu, .NET 8/9/10): `dotnet restore` → `dotnet build` → `dotnet test`.
+CI runs on `push`/`PR` to `main` (Ubuntu, .NET 8/9/10): `dotnet restore` → `dotnet build` → `dotnet test`. The publish job (tag-triggered) only needs .NET 8 to pack the library.
 
 NuGet publish triggers automatically on `v*` tags (e.g. `v1.0.0`) via the `NUGET_API_KEY` repository secret.
 
@@ -42,8 +42,12 @@ This is a single-purpose library with no dependencies beyond polyfills for `nets
 
 **Internal**:
 - `SegmentedBuffer` — append-only, `ArrayPool`-backed accumulator used only in the fragmented slow path; must be disposed to return rented arrays
+- `WebSocketReceiveResult` — shim type for the `ArraySegment<byte>` overload result; ensures uniform handling across all TFMs
 
-**Multi-targeting**: `netstandard2.0;net8.0;net9.0;net10.0`. The `netstandard2.0` target pulls in `Microsoft.Bcl.AsyncInterfaces`, `System.Memory`, and `System.Threading.Tasks.Extensions`. All targets use the `ArraySegment<byte>` overload of `WebSocket.ReceiveAsync` for uniformity. `LangVersion=latest` is set globally so C# modern syntax works on all TFMs.
+**Testing**:
+- `FakeWebSocket` — a queue-based `WebSocket` subclass; pre-enqueue fragments with `Enqueue()`/`EnqueueClose()` to drive tests without a real socket. Each `Enqueue` call maps to one `ReceiveAsync` call (one fragment read), not one logical message.
+
+**Multi-targeting**: `netstandard2.0;net8.0`. The `netstandard2.0` target pulls in `Microsoft.Bcl.AsyncInterfaces`, `System.Memory`, and `System.Threading.Tasks.Extensions`. `net8.0` covers all modern .NET (8/9/10+) via NuGet's built-in compatibility. All targets use the `ArraySegment<byte>` overload of `WebSocket.ReceiveAsync` for uniformity. `LangVersion=latest` is set globally so C# modern syntax works on all TFMs.
 
 **Package management**: Central via `Directory.Packages.props`. `Directory.Build.props` sets `ImplicitUsings`, `Nullable`, `ArtifactsPath`, and the Release-mode no-symbols config (`DebugType=none`, `DebugSymbols=false`).
 

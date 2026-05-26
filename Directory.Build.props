@@ -2,7 +2,7 @@
   <PropertyGroup>
       <ImplicitUsings>enable</ImplicitUsings>
       <Nullable>enable</Nullable>
-      <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts\</ArtifactsPath>
+      <UseArtifactsOutput>true</UseArtifactsOutput>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">

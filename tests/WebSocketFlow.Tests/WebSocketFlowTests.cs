@@ -48,6 +48,18 @@ public class WebSocketFlowTests
     }
 
     [Fact]
+    public async Task ReadAllMessagesAsync_NullWebSocket_ThrowsArgumentNullException()
+    {
+        WebSocket ws = null!;
+        await Assert.ThrowsAsync<ArgumentNullException>(async () =>
+        {
+            await foreach (var _ in ws.ReadAllMessagesAsync(cancellationToken: TestContext.Current.CancellationToken))
+            {
+            }
+        });
+    }
+
+    [Fact]
     public async Task ReadAllMessagesAsync_StopsOnCloseFrame()
     {
         var ws = new FakeWebSocket();
@@ -55,6 +67,20 @@ public class WebSocketFlowTests
         ws.EnqueueClose();
         // This would throw "no more fragments" if the enumerator reads past the close
         ws.Enqueue("after-close"u8.ToArray(), WebSocketMessageType.Text, endOfMessage: true);
+
+        var count = 0;
+        await foreach (var _ in ws.ReadAllMessagesAsync(cancellationToken: TestContext.Current.CancellationToken))
+            count++;
+
+        Assert.Equal(1, count);
+    }
+
+    [Fact]
+    public async Task ReadAllMessagesAsync_WebSocketException_StopsEnumeration()
+    {
+        var ws = new FakeWebSocket();
+        ws.Enqueue("msg"u8.ToArray(), WebSocketMessageType.Text, endOfMessage: true);
+        ws.EnqueueException(new WebSocketException("connection reset"));
 
         var count = 0;
         await foreach (var _ in ws.ReadAllMessagesAsync(cancellationToken: TestContext.Current.CancellationToken))
@@ -93,19 +119,11 @@ public class WebSocketFlowTests
     }
 
     [Fact]
-    public async Task ReceiveMessageAsync_CancellationBeforeReceive_Throws()
+    public async Task ReceiveMessageAsync_BufferSizeZero_ThrowsArgumentOutOfRangeException()
     {
         var ws = new FakeWebSocket();
-        using var cts = new CancellationTokenSource();
-        await cts.CancelAsync();
-
-        // The fake WebSocket still has an item; but the enumerator should honour cancellation.
-        ws.Enqueue("x"u8.ToArray(), WebSocketMessageType.Text, endOfMessage: true);
-
-        // ReceiveAsync on our fake always yields; whether or not cancellation is thrown
-        // depends on CancellationToken.ThrowIfCancellationRequested integration.
-        // We test at the ReadAllMessagesAsync level instead (see below).
-        await Task.CompletedTask; // placeholder — see ReadAllMessagesAsync cancellation test
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
+            ws.ReceiveMessageAsync(bufferSize: 0, TestContext.Current.CancellationToken).AsTask());
     }
 
     [Fact]
@@ -154,6 +172,22 @@ public class WebSocketFlowTests
         var msg = await ws.ReceiveMessageAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal("hello!", Encoding.UTF8.GetString(msg.Data.Span));
+    }
+
+    [Fact]
+    public async Task ReceiveMessageAsync_NegativeBufferSize_ThrowsArgumentOutOfRangeException()
+    {
+        var ws = new FakeWebSocket();
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
+            ws.ReceiveMessageAsync(bufferSize: -1, TestContext.Current.CancellationToken).AsTask());
+    }
+
+    [Fact]
+    public async Task ReceiveMessageAsync_NullWebSocket_ThrowsArgumentNullException()
+    {
+        WebSocket ws = null!;
+        await Assert.ThrowsAsync<ArgumentNullException>(() =>
+            ws.ReceiveMessageAsync(TestContext.Current.CancellationToken).AsTask());
     }
 
     [Fact]
