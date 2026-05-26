@@ -3,6 +3,7 @@
 [![CI](https://github.com/coldhighsun/WebSocketFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/coldhighsun/WebSocketFlow/actions/workflows/ci.yml)
 [![NuGet Version](https://img.shields.io/nuget/v/WebSocketFlow)](https://www.nuget.org/packages/WebSocketFlow)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/WebSocketFlow)](https://www.nuget.org/packages/WebSocketFlow)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Extension methods for `System.Net.WebSockets.WebSocket` that simplify receiving complete messages and asynchronously enumerating incoming messages.
 
@@ -18,9 +19,7 @@ Extension methods for `System.Net.WebSockets.WebSocket` that simplify receiving 
 | Framework | Supported |
 |---|---|
 | .NET Standard 2.0 | ✓ |
-| .NET 8.0 | ✓ |
-| .NET 9.0 | ✓ |
-| .NET 10.0 | ✓ |
+| .NET 8.0+ | ✓ |
 
 ## Installation
 
@@ -77,6 +76,11 @@ Enumeration stops automatically when a close frame is received or the cancellati
 
 # WebSocketFlow
 
+[![CI](https://github.com/coldhighsun/WebSocketFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/coldhighsun/WebSocketFlow/actions/workflows/ci.yml)
+[![NuGet Version](https://img.shields.io/nuget/v/WebSocketFlow)](https://www.nuget.org/packages/WebSocketFlow)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/WebSocketFlow)](https://www.nuget.org/packages/WebSocketFlow)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 对 `System.Net.WebSockets.WebSocket` 的扩展方法，简化完整消息的接收与异步枚举。
 
 ---
@@ -91,9 +95,7 @@ Enumeration stops automatically when a close frame is received or the cancellati
 | 框架 | 支持 |
 |---|---|
 | .NET Standard 2.0 | ✓ |
-| .NET 8.0 | ✓ |
-| .NET 9.0 | ✓ |
-| .NET 10.0 | ✓ |
+| .NET 8.0+ | ✓ |
 
 ## 安装
 

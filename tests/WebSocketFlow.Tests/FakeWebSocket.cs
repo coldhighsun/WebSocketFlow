@@ -10,6 +10,8 @@ internal sealed class FakeWebSocket : WebSocket
 {
     public record Fragment(byte[] Data, WebSocketMessageType MessageType, bool EndOfMessage);
 
+    private sealed record ExceptionFragment(Exception Exception) : Fragment([], WebSocketMessageType.Text, false);
+
     private readonly Queue<Fragment> _fragments = new();
 
     public override WebSocketCloseStatus? CloseStatus => null;
@@ -35,6 +37,9 @@ internal sealed class FakeWebSocket : WebSocket
     public void EnqueueClose() =>
         _fragments.Enqueue(new([], WebSocketMessageType.Close, true));
 
+    public void EnqueueException(Exception exception) =>
+        _fragments.Enqueue(new ExceptionFragment(exception));
+
     public override async ValueTask<ValueWebSocketReceiveResult> ReceiveAsync(
         Memory<byte> buffer, CancellationToken cancellationToken)
     {
@@ -42,6 +47,9 @@ internal sealed class FakeWebSocket : WebSocket
 
         if (!_fragments.TryDequeue(out var fragment))
             throw new InvalidOperationException("No more queued fragments.");
+
+        if (fragment is ExceptionFragment ex)
+            throw ex.Exception;
 
         fragment.Data.AsSpan().CopyTo(buffer.Span);
         return new(fragment.Data.Length, fragment.MessageType, fragment.EndOfMessage);
