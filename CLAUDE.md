@@ -28,7 +28,7 @@ dotnet pack src/WebSocketFlow/WebSocketFlow.csproj -c Release -o ./artifacts
 
 CI runs on `push`/`PR` to `main` (Ubuntu, .NET 10): `dotnet restore` → `dotnet build` → `dotnet test`. The publish job (tag-triggered) packs the library with .NET 10.
 
-NuGet publish triggers automatically on `v*` tags (e.g. `v1.0.0`) via the `NUGET_API_KEY` repository secret.
+NuGet publish triggers automatically on `v*` tags (e.g. `v1.0.0`) via NuGet Trusted Publishing (OIDC): the `publish` job runs in the `release` environment with `id-token: write` and exchanges the `NUGET_USER` environment secret (nuget.org username) for a short-lived key through `NuGet/login@v1`. The nuget.org policy is bound to the workflow file name `ci.yml`.
 
 ## Architecture
 
