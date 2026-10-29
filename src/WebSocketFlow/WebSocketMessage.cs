@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using System.Text;
 
 namespace WebSocketFlow;
 
@@ -38,4 +39,10 @@ public sealed class WebSocketMessage
     {
         get;
     }
+
+    /// <summary>
+    /// Decodes the payload as UTF-8 text.
+    /// </summary>
+    /// <returns>The payload decoded as a UTF-8 string.</returns>
+    public string GetString() => Encoding.UTF8.GetString(Data.Span);
 }

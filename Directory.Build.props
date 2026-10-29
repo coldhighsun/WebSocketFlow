@@ -1,12 +1,10 @@
 <Project>
   <PropertyGroup>
+      <TargetFramework>net10.0</TargetFramework>
       <ImplicitUsings>enable</ImplicitUsings>
       <Nullable>enable</Nullable>
       <UseArtifactsOutput>true</UseArtifactsOutput>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <DebugType>portable</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+      <DebugType>embedded</DebugType>
+      <LangVersion>latest</LangVersion>
   </PropertyGroup>
 </Project>
